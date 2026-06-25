@@ -1,10 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { Prisma, PrismaClient } from '@prisma/client';
-
-// It's a good practice to instantiate PrismaClient once and reuse it.
-const prisma = new PrismaClient();
+import prisma from '../../prisma';
 
 type GetPreordersParams = {
   page?: number;

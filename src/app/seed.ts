@@ -1,15 +1,13 @@
-import { PrismaClient } from "@prisma/client";
 import { faker } from "@faker-js/faker";
-
-const prisma = new PrismaClient();
+import { prisma } from "../lib/db";
 
 async function main() {
   console.log("Seeding database...");
 
   // Clear existing data to ensure a clean slate
-  await prisma.preorder.deleteMany({});
+  // await prisma.preorder.deleteMany({}); // Optional: comment out if you want to add to existing data
 
-  const preorders = [];
+  const preordersData = [];
 
   for (let i = 0; i < 10; i++) {
     const startsAt = faker.date.recent({ days: 30 });
@@ -18,7 +16,7 @@ async function main() {
       ? faker.date.future({ refDate: startsAt })
       : null;
 
-    preorders.push({
+    preordersData.push({
       name: faker.commerce.productName(),
       products: faker.number.int({ min: 1, max: 1000 }),
       preorderWhen: `${faker.number.int({ min: 1, max: 12 })} ${faker.helpers.arrayElement(['days', 'weeks', 'months'])}`,
@@ -29,7 +27,7 @@ async function main() {
   }
 
   await prisma.preorder.createMany({
-    data: preorders,
+    data: preordersData,
   });
 
   console.log("Seeding complete. 🌱");
